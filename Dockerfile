@@ -1,8 +1,7 @@
-FROM golang:1.18
+FROM golang:1.24.1 AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod tidy
 COPY . .
 RUN go build -o main .
-EXPOSE 5000
 CMD ["./main"]
