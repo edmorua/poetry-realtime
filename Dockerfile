@@ -9,7 +9,7 @@ RUN go mod tidy
 
 # Copy the rest of the code and build the application
 COPY . .
-RUN go build -o main .
+RUN go build -o main .  #  This ensures `main` is built
 
 # Use a minimal image for running the app
 FROM alpine:latest
