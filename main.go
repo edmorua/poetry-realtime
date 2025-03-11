@@ -2,12 +2,22 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"net/http"
+	"poetry-realtime/config"
+	"poetry-realtime/server"
 )
 
 func main() {
-	fmt.Println("Poetry Real-Time Service is Running")
-	for {
-		time.Sleep(time.Hour)
-	}
+	config.LoadConfig() // Load environment variables
+
+	hub := server.NewHub()
+	go hub.Run()
+
+	port := ":" + config.Port
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		server.ServeWs(hub, w, r)
+	})
+
+	fmt.Println("WebSocket server started on", port)
+	http.ListenAndServe(port, nil)
 }
